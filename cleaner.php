@@ -6,6 +6,7 @@ $accounts = array(
 		'login' => '????????',
 		'hpassword' => md5('????????'),
 		'community' => '????????',
+		'stopwords'	=> array('??????'),
 	),
 );
 
@@ -23,14 +24,15 @@ foreach ($accounts as $acc) {
 			/**
 			 * Тут можно вставить любую логику проверки
 			 */
-			if (strpos($event['event'], 'profitstat.biz') !== false)
-				LJ::delevent(
-					$acc['login'],
-					$acc['hpassword'],
-					$acc['community'],
-					$event['itemid'],
-					$event['anum']
-				);
+			foreach ($acc['stopwords'] as $stop)
+				if (strpos($event['event'], $stop) !== false)
+					LJ::delevent(
+						$acc['login'],
+						$acc['hpassword'],
+						$acc['community'],
+						$event['itemid'],
+						$event['anum']
+					);
 		}
 	} catch (Exception $e) {
 		echo 'LJ Cleaner error: '.$e->getMessage()."\n";
