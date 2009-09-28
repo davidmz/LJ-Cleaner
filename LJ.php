@@ -94,6 +94,19 @@ class LJ {
 		return $res;
 	}
 	
+	public static function consolecommand(
+		$username,
+		$hpassword,
+		$command
+	) {
+		$args = array(
+			'command'		=> $command,
+		);
+		
+		$res = self::request('consolecommand', self::auth($username, $hpassword, $args));
+		return $res;
+	}
+	
 	private static function auth($username, $hpassword, $args = array()) {
 		$challenge = self::getchallenge();
 		$args['user'] = $username;
@@ -143,6 +156,7 @@ class LJ {
 			foreach ($parts as $p) {
 				if (is_numeric($p)) {
 					if (!isset($current[$p])) $current[$p] = array();
+					if (!is_array($current[$p])) $current[$p] = array('' => $current[$p]);
 					$current =& $current[$p];
 				} else {
 					if (!isset($current[$p])) $current[$p] = array();
